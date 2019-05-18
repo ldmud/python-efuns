@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="ldmud-efuns",
-    version="0.0.1",
+    version="0.0.2",
     author="LDMud Team",
     author_email="ldmud-dev@UNItopia.DE",
     description="Python Efun package for LDMud",
@@ -19,10 +19,13 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     entry_points={
-        'ldmud_efuns': [
-              'strings = ldmudefuns.strings:register',
-              'json    = ldmudefuns.json:register',
-              'reload  = ldmudefuns.reload:register',
+        'ldmud_efun': [
+              'wrap           = ldmudefuns.strings:efun_wrap',
+              'wrap_say       = ldmudefuns.strings:efun_wrap_say',
+              'left           = ldmudefuns.strings:efun_left',
+              'json_serialize = ldmudefuns.json:efun_json_serialize',
+              'json_parse     = ldmudefuns.json:efun_json_parse',
+              'python_reload  = ldmudefuns.reload:reload_modules',
         ]
     },
     zip_safe=False,

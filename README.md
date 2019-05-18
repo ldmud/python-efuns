@@ -43,6 +43,13 @@ python3 setup.py install --user
 Use [startup.py](https://github.com/ldmud/python-efuns/blob/master/startup.py) as the Python startup script for LDMud.
 It will automatically detect the installed python efuns and load them.
 
+You can deactivate single efuns with a configfile `.ldmud-efuns`
+in your home directory, with the following contents
+```
+[efuns]
+name_of_the_efun = off
+```
+
 ### Manually load the modules at startup
 
 Add the following lines to your startup script:

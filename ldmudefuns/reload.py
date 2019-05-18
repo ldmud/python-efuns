@@ -1,4 +1,4 @@
-import importlib, pkg_resources, site, sys
+import importlib, pkg_resources, site, sys, os, configparser
 import ldmud
 
 def reload_modules():
@@ -16,17 +16,32 @@ def reload_modules():
     importlib.reload(site)
     ws = pkg_resources.WorkingSet()
     modules = dict(sys.modules)
+    reloaded = set()
 
-    for entry_point in ws.iter_entry_points('ldmud_efuns'):
-        fun = entry_point.load()
-        if fun.__module__ in modules:
-            modob = modules[fun.__module__]
-            try:
-                modob.on_reload()
-            except:
-                pass
-            importlib.reload(modob)
-        fun()
+    config = configparser.ConfigParser()
+    config['efuns'] = {}
+    config.read(os.path.expanduser('~/.ldmud-efuns'))
+    efunconfig = config['efuns']
+
+    for entry_point in ws.iter_entry_points('ldmud_efun'):
+        if efunconfig.getboolean(entry_point.name, True):
+            # Remove the corresponding modules from sys.modules
+            # so they will be reloaded.
+            names = entry_point.module_name.split('.')
+            for module in ('.'.join(names[:pos]) for pos in range(len(names), 0, -1)):
+                if not module in modules or module in reloaded:
+                    break
+
+                try:
+                    sys.modules[module].on_reload()
+                except:
+                    pass
+
+                del sys.modules[module]
+                reloaded.add(module)
+                print("Reload module", module)
+
+            ldmud.register_efun(entry_point.name, entry_point.load())
 
 def register():
     ldmud.register_efun("python_reload", reload_modules)

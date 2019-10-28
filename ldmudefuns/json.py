@@ -31,7 +31,7 @@ class LPCDecoder(json.JSONDecoder):
         (val, end) = self.orig_parse_object(*args, **kwargs)
         return (ldmud.Mapping(val), end)
 
-def efun_json_serialize(value):
+def efun_json_serialize(value) -> str:
     """
     SYNOPSIS
 
@@ -72,7 +72,7 @@ def efun_json_serialize(value):
     """
     return json.dumps(value, cls=LPCEncoder)
 
-def efun_json_parse(text):
+def efun_json_parse(text: str):
     """
     SYNOPSIS
 

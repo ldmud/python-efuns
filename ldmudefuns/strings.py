@@ -84,7 +84,7 @@ def do_wrap(text, maxlen, firstindent, followindent):
 
     return result
 
-def efun_wrap(text, maxlen = 0, left = 0):
+def efun_wrap(text: str, maxlen: int = 0, left: int = 0) -> str:
     """
     SYNOPSIS
             string wrap(string text [, int len [, int left]])
@@ -111,7 +111,7 @@ def efun_wrap(text, maxlen = 0, left = 0):
 
     return do_wrap(text, maxlen, left, left)
 
-def efun_wrap_say(text1, text2, maxlen = 0, left = 0):
+def efun_wrap_say(text1: str, text2: str, maxlen: int = 0, left: int = 0):
     """
     SYNOPSIS
             string wrap_say(string intro, string text [, int len [, int left]])
@@ -149,7 +149,7 @@ def efun_wrap_say(text1, text2, maxlen = 0, left = 0):
 
     return do_wrap(text1 + " " + text2, maxlen, 0, left)
 
-def efun_left(text, size, pad = " "):
+def efun_left(text: (str,int,), size: int, pad: str = " ") -> str:
     """
     SYNOPSIS
             string left(string text, int len [,string pattern])

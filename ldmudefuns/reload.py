@@ -12,6 +12,9 @@ def reload_modules():
             Then the entry point is executed to register the efuns.
 
             Before reloading the function on_reload() is called in the module.
+
+    SEE ALSO
+            python_efun_help(E)
     """
     importlib.reload(site)
     ws = pkg_resources.WorkingSet()

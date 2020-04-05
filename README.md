@@ -12,6 +12,8 @@ This package contains the following efuns:
     * `string json_serialize(mixed data)`
  * `reload` module:
     * `void python_reload()`
+ * `help` module:
+    * `string python_efun_help(string efunname)`
 
 ## Usage
 
@@ -61,6 +63,7 @@ import ldmudefuns.reload
 ldmudefuns.strings.register()
 ldmudefuns.json.register()
 ldmudefuns.reload.register()
+ldmudefuns.help.register()
 ```
 
 Have fun!

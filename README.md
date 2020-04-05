@@ -59,6 +59,7 @@ Add the following lines to your startup script:
 import ldmudefuns.strings
 import ldmudefuns.json
 import ldmudefuns.reload
+import ldmudefuns.help
 
 ldmudefuns.strings.register()
 ldmudefuns.json.register()

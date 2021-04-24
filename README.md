@@ -1,19 +1,12 @@
 # Python Efun package for LDMud
 
-These are python efuns to be used with LDMud 3.5 and later.
+These are routines and python efuns for management of Python efuns with LDMud 3.5 and later.
+
+The package allows efuns to be dynamically detected, registered and reloaded.
 
 This package contains the following efuns:
- * `strings` module:
-    * `string wrap(string str [, int len [, int left]])`
-    * `string wrap_say(string intro, string text [, int len [, int left]])`
-    * `string left(string text, int len [,string pattern])`
- * `json` module:
-    * `mixed json_parse(string jsonstring)`
-    * `string json_serialize(mixed data)`
- * `reload` module:
-    * `void python_reload()`
- * `help` module:
-    * `string python_efun_help(string efunname)`
+ * `void python_reload()`
+ * `string python_efun_help(string efunname)`
 
 ## Usage
 
@@ -56,13 +49,9 @@ name_of_the_efun = off
 
 Add the following lines to your startup script:
 ```
-import ldmudefuns.strings
-import ldmudefuns.json
 import ldmudefuns.reload
 import ldmudefuns.help
 
-ldmudefuns.strings.register()
-ldmudefuns.json.register()
 ldmudefuns.reload.register()
 ldmudefuns.help.register()
 ```

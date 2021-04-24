@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="ldmud-efuns",
-    version="0.0.5",
+    version="0.1.0",
     author="LDMud Team",
     author_email="ldmud-dev@UNItopia.DE",
-    description="Python Efun package for LDMud",
+    description="Python Efun management package for LDMud",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ldmud/python-efuns",
@@ -20,11 +20,6 @@ setuptools.setup(
     ],
     entry_points={
         'ldmud_efun': [
-              'wrap             = ldmudefuns.strings:efun_wrap',
-              'wrap_say         = ldmudefuns.strings:efun_wrap_say',
-              'left             = ldmudefuns.strings:efun_left',
-              'json_serialize   = ldmudefuns.json:efun_json_serialize',
-              'json_parse       = ldmudefuns.json:efun_json_parse',
               'python_reload    = ldmudefuns.reload:reload_modules',
               'python_efun_help = ldmudefuns.help:python_efun_help',
         ]

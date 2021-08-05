@@ -6,6 +6,9 @@
 #
 #   [efuns]
 #   name_of_the_efun = off
+# 
+# If you would like to load configuration from a different file, pass the
+# path to the startup function, e.g. startup(config_path='~/.ldmud-efuns-test')
 
 from ldmudefuns.startup import startup
 

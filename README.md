@@ -1,8 +1,8 @@
 # Python Efun package for LDMud
 
-These are routines and python efuns for management of Python efuns with LDMud 3.5 and later.
+These are routines and python efuns for management of Python efuns and types with LDMud 3.5 and later.
 
-The package allows efuns to be dynamically detected, registered and reloaded.
+The package allows efuns and types to be dynamically detected, registered and reloaded.
 
 This package contains the following efuns:
  * `void python_reload()`
@@ -43,6 +43,9 @@ in your home directory, with the following contents
 ```
 [efuns]
 name_of_the_efun = off
+
+[types]
+name_of_the_type = off
 ```
 
 ### Manually load the modules at startup

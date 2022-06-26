@@ -23,28 +23,35 @@ def reload_modules():
 
     config = configparser.ConfigParser()
     config['efuns'] = {}
+    config['types'] = {}
     config.read(os.path.expanduser('~/.ldmud-efuns'))
-    efunconfig = config['efuns']
 
-    for entry_point in ws.iter_entry_points('ldmud_efun'):
-        if efunconfig.getboolean(entry_point.name, True):
-            # Remove the corresponding modules from sys.modules
-            # so they will be reloaded.
-            names = entry_point.module_name.split('.')
-            for module in ('.'.join(names[:pos]) for pos in range(len(names), 0, -1)):
-                if not module in modules or module in reloaded:
-                    break
+    ep_types = []
+    if hasattr(ldmud, 'register_type'):
+        ep_types.append(('ldmud_type', config['types'], ldmud.register_type,))
+    if hasattr(ldmud, 'register_efun'):
+        ep_types.append(('ldmud_efun', config['efuns'], ldmud.register_efun,))
 
-                try:
-                    sys.modules[module].on_reload()
-                except:
-                    pass
+    for ep_name, ep_config, ep_register in ep_types:
+        for entry_point in ws.iter_entry_points(ep_name):
+            if ep_config.getboolean(entry_point.name, True):
+                # Remove the corresponding modules from sys.modules
+                # so they will be reloaded.
+                names = entry_point.module_name.split('.')
+                for module in ('.'.join(names[:pos]) for pos in range(len(names), 0, -1)):
+                    if not module in modules or module in reloaded:
+                        break
 
-                del sys.modules[module]
-                reloaded.add(module)
-                print("Reload module", module)
+                    try:
+                        sys.modules[module].on_reload()
+                    except:
+                        pass
 
-            ldmud.register_efun(entry_point.name, entry_point.load())
+                    del sys.modules[module]
+                    reloaded.add(module)
+                    print("Reload module", module)
+
+                ep_register(entry_point.name, entry_point.load())
 
 def register():
     ldmud.register_efun("python_reload", reload_modules)

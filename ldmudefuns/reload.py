@@ -1,5 +1,10 @@
-import importlib, pkg_resources, site, sys, os, configparser
+import importlib, sys, os, configparser
 import ldmud
+
+try:
+    import importlib.metadata as metadata
+except ModuleNotFoundError:
+    import importlib_metadata as metadata
 
 def reload_modules():
     """
@@ -16,10 +21,10 @@ def reload_modules():
     SEE ALSO
             python_efun_help(E)
     """
-    importlib.reload(site)
-    ws = pkg_resources.WorkingSet()
+    importlib.reload(metadata)
     modules = dict(sys.modules)
     reloaded = set()
+    eps = metadata.entry_points()
 
     config = configparser.ConfigParser()
     config['efuns'] = {}
@@ -33,11 +38,11 @@ def reload_modules():
         ep_types.append(('ldmud_efun', config['efuns'], ldmud.register_efun,))
 
     for ep_name, ep_config, ep_register in ep_types:
-        for entry_point in ws.iter_entry_points(ep_name):
+        for entry_point in eps.get(ep_name,()):
             if ep_config.getboolean(entry_point.name, True):
                 # Remove the corresponding modules from sys.modules
                 # so they will be reloaded.
-                names = entry_point.module_name.split('.')
+                names = entry_point.module.split('.')
                 for module in ('.'.join(names[:pos]) for pos in range(len(names), 0, -1)):
                     if not module in modules or module in reloaded:
                         break

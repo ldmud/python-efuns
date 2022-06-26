@@ -1,5 +1,10 @@
-import pkg_resources, os, configparser
+import os, configparser
 import ldmud
+
+try:
+    import importlib.metadata as metadata
+except ModuleNotFoundError:
+    import importlib_metadata as metadata
 
 def python_efun_help(efunname: str) -> str:
     """
@@ -20,8 +25,11 @@ def python_efun_help(efunname: str) -> str:
     if not efunconfig.getboolean(efunname, True):
         return None
 
-    ws = pkg_resources.WorkingSet()
-    for entry_point in ws.iter_entry_points('ldmud_efun', efunname):
+    eps = metadata.entry_points()
+    for entry_point in eps.get('ldmud_efun', ()):
+        if entry_point.name != efunname:
+            continue
+
         doc = getattr(entry_point.load(), '__doc__', None)
         if doc:
             # Trim algorithm from PEP 257

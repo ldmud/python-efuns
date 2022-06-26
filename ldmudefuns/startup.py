@@ -8,8 +8,13 @@ def startup():
         name_of_the_efun = off
     """
 
-    import pkg_resources, traceback, sys, os, configparser
+    import traceback, sys, os, configparser
     import ldmud
+
+    try:
+        import importlib.metadata as metadata
+    except ModuleNotFoundError:
+        import importlib_metadata as metadata
 
     config = configparser.ConfigParser()
     config['efuns'] = {}
@@ -22,8 +27,10 @@ def startup():
     if hasattr(ldmud, 'register_efun'):
         ep_types.append(('ldmud_efun', 'efun', config['efuns'], ldmud.register_efun,))
 
+    eps = metadata.entry_points()
+
     for ep_name, ep_desc, ep_config, ep_register in ep_types:
-        for entry_point in pkg_resources.iter_entry_points(ep_name):
+        for entry_point in eps.get(ep_name,()):
             if ep_config.getboolean(entry_point.name, True):
                 try:
                     print("Registering Python", ep_desc, entry_point.name)

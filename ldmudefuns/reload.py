@@ -33,11 +33,11 @@ def reload_modules():
 
     ep_types = []
     if hasattr(ldmud, 'register_type'):
-        ep_types.append(('ldmud_type', config['types'], ldmud.register_type,))
+        ep_types.append(('ldmud_type', 'type', config['types'], ldmud.register_type,))
     if hasattr(ldmud, 'register_efun'):
-        ep_types.append(('ldmud_efun', config['efuns'], ldmud.register_efun,))
+        ep_types.append(('ldmud_efun', 'efun', config['efuns'], ldmud.register_efun,))
 
-    for ep_name, ep_config, ep_register in ep_types:
+    for ep_name, ep_desc, ep_config, ep_register in ep_types:
         for entry_point in eps.get(ep_name,()):
             if ep_config.getboolean(entry_point.name, True):
                 # Remove the corresponding modules from sys.modules
@@ -56,7 +56,14 @@ def reload_modules():
                     reloaded.add(module)
                     print("Reload module", module)
 
-                ep_register(entry_point.name, entry_point.load())
+    for ep_name, ep_desc, ep_config, ep_register in ep_types:
+        for entry_point in eps.get(ep_name,()):
+            if ep_config.getboolean(entry_point.name, True):
+                try:
+                    print("Re-registering Python", ep_desc, entry_point.name)
+                    ep_register(entry_point.name, entry_point.load())
+                except:
+                    traceback.print_exc()
 
 def register():
     ldmud.register_efun("python_reload", reload_modules)

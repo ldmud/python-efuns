@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="ldmud-efuns",
-    version="0.2.2",
+    version="0.2.3",
     author="LDMud Team",
     author_email="ldmud-dev@UNItopia.DE",
     description="Python Efun management package for LDMud",

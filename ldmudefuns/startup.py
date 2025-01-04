@@ -8,7 +8,7 @@ def startup():
         name_of_the_efun = off
     """
 
-    import traceback, sys, os, configparser
+    import traceback, os, configparser
     import ldmud
 
     try:

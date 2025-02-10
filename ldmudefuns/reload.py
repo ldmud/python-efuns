@@ -1,12 +1,7 @@
 import importlib, sys
 import ldmud
 
-try:
-    import importlib.metadata as metadata
-except ModuleNotFoundError:
-    import importlib_metadata as metadata
-
-from .internal import get_registration_types
+from .internal import get_registration_types, get_entry_points, metadata
 
 def reload_modules():
     """
@@ -26,11 +21,10 @@ def reload_modules():
     importlib.reload(metadata)
     modules = dict(sys.modules)
     reloaded = set()
-    eps = metadata.entry_points()
     ep_types = get_registration_types()
 
     for ep_name, ep_desc, ep_config, ep_register in ep_types:
-        for entry_point in eps.get(ep_name,()):
+        for entry_point in get_entry_points(ep_name):
             if ep_config.getboolean(entry_point.name, True):
                 # Remove the corresponding modules from sys.modules
                 # so they will be reloaded.
@@ -49,7 +43,7 @@ def reload_modules():
                     print("Reload module", module)
 
     for ep_name, ep_desc, ep_config, ep_register in ep_types:
-        for entry_point in eps.get(ep_name,()):
+        for entry_point in get_entry_points(ep_name):
             if ep_config.getboolean(entry_point.name, True):
                 try:
                     print("Re-registering Python", ep_desc, entry_point.name)

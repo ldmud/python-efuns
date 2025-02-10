@@ -2,6 +2,11 @@ import os
 import configparser
 import ldmud
 
+try:
+    import importlib.metadata as metadata
+except ModuleNotFoundError:
+    import importlib_metadata as metadata
+
 def get_config():
     config = configparser.ConfigParser()
     config['efuns'] = {}
@@ -17,3 +22,6 @@ def get_registration_types():
     if hasattr(ldmud, 'register_efun'):
         ep_types.append(('ldmud_efun', 'efun', config['efuns'], ldmud.register_efun))
     return ep_types
+
+def get_entry_points(group_name):
+    return metadata.entry_points().get(group_name, ())

@@ -1,5 +1,7 @@
 import ldmud
 
+from .internal import get_config, get_entry_points
+
 def format_docstring(efun) -> str:
     doc = getattr(efun, '__doc__', None)
     if doc:
@@ -47,13 +49,6 @@ if hasattr(ldmud, 'registered_efuns'):
             return format_docstring(efun)
 
 else:
-    import os, configparser
-
-    try:
-        import importlib.metadata as metadata
-    except ModuleNotFoundError:
-        import importlib_metadata as metadata
-
     def python_efun_help(efunname: str) -> str:
         """
         SYNOPSIS
@@ -65,16 +60,12 @@ else:
         SEE ALSO
                 python_reload(E)
         """
-        config = configparser.ConfigParser()
-        config['efuns'] = {}
-        config.read(os.path.expanduser('~/.ldmud-efuns'))
-        efunconfig = config['efuns']
+        efunconfig = get_config()['efuns']
 
         if not efunconfig.getboolean(efunname, True):
             return None
 
-        eps = metadata.entry_points()
-        for entry_point in eps.get('ldmud_efun', ()):
+        for entry_point in get_entry_points('ldmud_efun'):
             if entry_point.name != efunname:
                 continue
 

@@ -1,4 +1,4 @@
-from .internal import get_config
+from .internal import get_registration_types
 
 def startup():
     """ Loads all registered packages that offer the ldmud_efun entry point.
@@ -11,24 +11,15 @@ def startup():
     """
 
     import traceback
-    import ldmud
 
     try:
         import importlib.metadata as metadata
     except ModuleNotFoundError:
         import importlib_metadata as metadata
 
-    config = get_config()
-
-    ep_types = []
-    if hasattr(ldmud, 'register_type'):
-        ep_types.append(('ldmud_type', 'type', config['types'], ldmud.register_type,))
-    if hasattr(ldmud, 'register_efun'):
-        ep_types.append(('ldmud_efun', 'efun', config['efuns'], ldmud.register_efun,))
-
     eps = metadata.entry_points()
 
-    for ep_name, ep_desc, ep_config, ep_register in ep_types:
+    for ep_name, ep_desc, ep_config, ep_register in get_registration_types():
         for entry_point in eps.get(ep_name,()):
             if ep_config.getboolean(entry_point.name, True):
                 try:

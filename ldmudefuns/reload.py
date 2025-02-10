@@ -6,7 +6,7 @@ try:
 except ModuleNotFoundError:
     import importlib_metadata as metadata
 
-from .internal import get_config
+from .internal import get_registration_types
 
 def reload_modules():
     """
@@ -27,14 +27,7 @@ def reload_modules():
     modules = dict(sys.modules)
     reloaded = set()
     eps = metadata.entry_points()
-
-    config = get_config()
-
-    ep_types = []
-    if hasattr(ldmud, 'register_type'):
-        ep_types.append(('ldmud_type', 'type', config['types'], ldmud.register_type,))
-    if hasattr(ldmud, 'register_efun'):
-        ep_types.append(('ldmud_efun', 'efun', config['efuns'], ldmud.register_efun,))
+    ep_types = get_registration_types()
 
     for ep_name, ep_desc, ep_config, ep_register in ep_types:
         for entry_point in eps.get(ep_name,()):

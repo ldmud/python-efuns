@@ -24,4 +24,14 @@ def get_registration_types():
     return ep_types
 
 def get_entry_points(group_name):
-    return metadata.entry_points().get(group_name, ())
+    eps = metadata.entry_points()
+
+    # Prior to importlib_metadata 5.0 and Python 3.12 entry_points()
+    # returned a dictionary of entry points keyed to group.
+    if isinstance(eps, dict):
+        return eps.get(group_name, ())
+
+    # For modern versions of importlib_metadata and Python 3.12
+    # entry_points() returns an EntryPoints object that can be
+    # queried with select().
+    return eps.select(group=group_name)

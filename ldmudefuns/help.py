@@ -1,5 +1,7 @@
 import ldmud
 
+from .internal import get_config
+
 def format_docstring(efun) -> str:
     doc = getattr(efun, '__doc__', None)
     if doc:
@@ -47,8 +49,6 @@ if hasattr(ldmud, 'registered_efuns'):
             return format_docstring(efun)
 
 else:
-    import os, configparser
-
     try:
         import importlib.metadata as metadata
     except ModuleNotFoundError:
@@ -65,10 +65,7 @@ else:
         SEE ALSO
                 python_reload(E)
         """
-        config = configparser.ConfigParser()
-        config['efuns'] = {}
-        config.read(os.path.expanduser('~/.ldmud-efuns'))
-        efunconfig = config['efuns']
+        efunconfig = get_config()['efuns']
 
         if not efunconfig.getboolean(efunname, True):
             return None

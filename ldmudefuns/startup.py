@@ -1,3 +1,5 @@
+from .internal import get_config
+
 def startup():
     """ Loads all registered packages that offer the ldmud_efun entry point.
 
@@ -8,7 +10,7 @@ def startup():
         name_of_the_efun = off
     """
 
-    import traceback, os, configparser
+    import traceback
     import ldmud
 
     try:
@@ -16,10 +18,7 @@ def startup():
     except ModuleNotFoundError:
         import importlib_metadata as metadata
 
-    config = configparser.ConfigParser()
-    config['efuns'] = {}
-    config['types'] = {}
-    config.read(os.path.expanduser('~/.ldmud-efuns'))
+    config = get_config()
 
     ep_types = []
     if hasattr(ldmud, 'register_type'):

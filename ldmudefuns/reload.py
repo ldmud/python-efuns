@@ -1,10 +1,12 @@
-import importlib, sys, os, configparser
+import importlib, sys
 import ldmud
 
 try:
     import importlib.metadata as metadata
 except ModuleNotFoundError:
     import importlib_metadata as metadata
+
+from .internal import get_config
 
 def reload_modules():
     """
@@ -26,10 +28,7 @@ def reload_modules():
     reloaded = set()
     eps = metadata.entry_points()
 
-    config = configparser.ConfigParser()
-    config['efuns'] = {}
-    config['types'] = {}
-    config.read(os.path.expanduser('~/.ldmud-efuns'))
+    config = get_config()
 
     ep_types = []
     if hasattr(ldmud, 'register_type'):
